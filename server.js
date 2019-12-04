@@ -13,9 +13,11 @@ function logger(req, res, next) {
 
 function gateKeeper(req, res, next) {
   const { password } = req.header;
-  console.log(password);
-
-  next();
+  if (password && password.toLowerCase() === "mellon ") {
+    next();
+  } else {
+    res.status(401).send("you shall not pass");
+  }
 }
 
 server.use(express.json());
@@ -37,7 +39,7 @@ server.get("/echo", (req, res) => {
   res.send(req.header);
 });
 
-server.get("/area51", gateKeeper(), (req, res) => {
+server.get("/area51", gateKeeper, (req, res) => {
   res.send(req.header);
 });
 
